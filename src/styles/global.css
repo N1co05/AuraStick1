@@ -176,6 +176,19 @@ button { font-family: inherit; }
     transition: all var(--duration) var(--ease);
 }
 
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px var(--primary-glow));
+}
+
 .logo-text {
     font-family: 'Playfair Display', serif;
     font-weight: 800;
