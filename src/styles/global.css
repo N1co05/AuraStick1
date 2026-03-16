@@ -35,13 +35,13 @@
     --gray-800: #d8cce0;
     --gray-900: #f4eeff;
 
-    /* Surfaces — pink-tinted */
-    --surface:         #0e0912;
-    --surface-elevated: rgba(24, 14, 30, 0.88);
-    --surface-card:     rgba(30, 18, 38, 0.75);
-    --surface-glass:    rgba(240, 101, 149, 0.03);
-    --glass-border:     rgba(240, 101, 149, 0.1);
-    --overlay:          rgba(10, 5, 15, 0.6);
+    /* Surfaces — rosy-dark */
+    --surface:         #150a14;
+    --surface-elevated: rgba(32, 14, 28, 0.9);
+    --surface-card:     rgba(38, 18, 34, 0.78);
+    --surface-glass:    rgba(240, 101, 149, 0.05);
+    --glass-border:     rgba(240, 101, 149, 0.12);
+    --overlay:          rgba(15, 5, 12, 0.6);
 
     /* Effects */
     --shadow-sm:  0 2px 8px rgba(0,0,0,0.3);
@@ -87,7 +87,7 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     overflow-x: hidden;
-    background: var(--surface);
+    background: #150a14;
 }
 
 img { max-width: 100%; display: block; }
@@ -101,10 +101,11 @@ button { font-family: inherit; }
     position: fixed;
     inset: 0;
     z-index: -2;
-    background: radial-gradient(ellipse at 20% 50%, rgba(240, 101, 149, 0.14) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(240, 101, 149, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(214, 51, 108, 0.08) 0%, transparent 50%),
-                var(--surface);
+    background: radial-gradient(ellipse at 20% 50%, rgba(240, 101, 149, 0.22) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 20%, rgba(214, 51, 108, 0.18) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 100%, rgba(240, 101, 149, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 0%, rgba(166, 30, 77, 0.12) 0%, transparent 40%),
+                linear-gradient(160deg, #1a0c18 0%, #150a14 30%, #1d0e1a 60%, #180c16 100%);
     animation: bgPulse 15s ease infinite alternate;
 }
 
@@ -123,24 +124,24 @@ button { font-family: inherit; }
     pointer-events: none;
 }
 .bg-blob--1 {
-    width: 700px; height: 700px;
+    width: 800px; height: 800px;
     background: var(--primary);
     top: -250px; right: -200px;
-    opacity: 0.22;
+    opacity: 0.28;
     animation: blobFloat 30s ease-in-out infinite alternate;
 }
 .bg-blob--2 {
-    width: 600px; height: 600px;
+    width: 700px; height: 700px;
     background: var(--primary-dark);
     bottom: -200px; left: -150px;
-    opacity: 0.2;
+    opacity: 0.25;
     animation: blobFloat 25s ease-in-out infinite alternate-reverse;
 }
 .bg-blob--3 {
-    width: 400px; height: 400px;
+    width: 500px; height: 500px;
     background: var(--primary-light);
     top: 40%; left: 50%;
-    opacity: 0.18;
+    opacity: 0.22;
     animation: blobFloat 35s ease-in-out infinite alternate;
 }
 

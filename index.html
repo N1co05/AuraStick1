@@ -14,12 +14,14 @@
             padding: 60px 0;
             overflow: hidden;
         }
+
         .marquee-track {
             display: flex;
             gap: 60px;
             animation: marqueeScroll 20s linear infinite;
             width: max-content;
         }
+
         .marquee-item {
             font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
@@ -29,22 +31,33 @@
             opacity: 0.3;
             user-select: none;
         }
+
         .marquee-item .dot {
             color: var(--primary);
             margin: 0 8px;
         }
+
         @keyframes marqueeScroll {
-            from { transform: translateX(0); }
-            to   { transform: translateX(-50%); }
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
         }
 
         /* ── Testimonial ── */
-        .testimonial-section { padding: 80px 0; }
+        .testimonial-section {
+            padding: 80px 0;
+        }
+
         .testimonial-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
         }
+
         .testimonial-card {
             padding: 32px;
             border-radius: var(--radius-lg);
@@ -52,21 +65,56 @@
             border: 1px solid var(--glass-border);
             transition: all 0.4s var(--ease);
         }
+
         .testimonial-card:hover {
             border-color: rgba(240, 101, 149, 0.15);
             transform: translateY(-4px);
         }
-        .testimonial-stars { color: #fbbf24; font-size: 1.1rem; margin-bottom: 16px; letter-spacing: 4px; }
-        .testimonial-text { color: var(--gray-700); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
-        .testimonial-author { display: flex; align-items: center; gap: 12px; }
-        .testimonial-avatar {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 0.85rem; color: #fff;
+
+        .testimonial-stars {
+            color: #fbbf24;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            letter-spacing: 4px;
         }
-        .testimonial-name { font-weight: 700; font-size: 0.9rem; color: var(--gray-800); }
-        .testimonial-handle { font-size: 0.8rem; color: var(--gray-500); }
+
+        .testimonial-text {
+            color: var(--gray-700);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: #fff;
+        }
+
+        .testimonial-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--gray-800);
+        }
+
+        .testimonial-handle {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
     </style>
 </head>
 
@@ -172,50 +220,7 @@
         </div>
     </section>
 
-    <!-- TESTIMONIALS -->
-    <section class="testimonial-section">
-        <div class="container">
-            <div style="text-align: center; margin-bottom: 60px;" class="reveal">
-                <div class="section-label">💬 Testimonios</div>
-                <h2 class="section-title">Lo que dicen nuestros clientes</h2>
-            </div>
-            <div class="testimonial-grid">
-                <div class="testimonial-card reveal">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Increíble calidad, los stickers no se despegan ni con lluvia. ¡Los amo!"</p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">M</div>
-                        <div>
-                            <div class="testimonial-name">Martina G.</div>
-                            <div class="testimonial-handle">Cliente verificada</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card reveal">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Pedí para personalizar mi notebook y quedó espectacular. Súper recomendado."</p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">L</div>
-                        <div>
-                            <div class="testimonial-name">Lucas P.</div>
-                            <div class="testimonial-handle">Cliente verificado</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card reveal">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Los diseños de anime son hermosos. La atención por WhatsApp es muy rápida."</p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">S</div>
-                        <div>
-                            <div class="testimonial-name">Sofía R.</div>
-                            <div class="testimonial-handle">Cliente verificada</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- TESTIMONIALS (desactivado) -->
 
     <!-- CTA -->
     <section class="showcase">
@@ -242,7 +247,7 @@
 
     <script>
         // ═══ PARTICLES ═══
-        (function() {
+        (function () {
             const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
