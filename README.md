@@ -1,6 +1,6 @@
-# 🌸 Aura Stickers — Rediseño Profesional
+# 🌸 Aura Sticks — Rediseño Profesional
 
-¡Bienvenido al repositorio de **Aura Stickers**! Este es un sitio de e-commerce moderno, minimalista y de alto impacto visual, diseñado para ofrecer una experiencia premium a tus clientes.
+¡Bienvenido al repositorio de **Aura Sticks**! Este es un sitio de e-commerce moderno, minimalista y de alto impacto visual, diseñado para ofrecer una experiencia premium a tus clientes.
 
 ## 🚀 Características Principales
 
@@ -40,4 +40,4 @@ Este proyecto está **100% adaptado para GitHub Pages**. No requiere configuraci
 4. ¡Listo! Tu tienda estará online en segundos.
 
 ---
-*Diseñado con ❤️ por Aura Stickers.*
+*Diseñado con ❤️ por Aura Sticks.*
