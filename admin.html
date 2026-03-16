@@ -399,6 +399,15 @@
 
     <div class="toast-container" id="toast-container"></div>
 
+    <!-- DEBUG CONSOLE (Temporary for troubleshooting) -->
+    <div class="container" style="margin-top: 40px; margin-bottom: 40px;">
+        <div class="glass-strong" style="padding: 20px; border-radius: var(--radius-lg); font-family: monospace; font-size: 0.8rem; max-height: 200px; overflow-y: auto; background: #1a1a1a; color: #00ff00; display: none;" id="debug-console">
+            <div style="color: #fff; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 4px;">🛠️ Consola de Depuración (Para errores)</div>
+            <div id="debug-log"></div>
+        </div>
+        <button class="btn btn-ghost" style="font-size: 0.7rem; padding: 8px 16px; margin-top: 10px;" onclick="document.getElementById('debug-console').style.display='block'">Mostrar consola de errores</button>
+    </div>
+
     <script>
         // Detector de carga de módulos (para diagnosticar bloqueos de seguridad)
         window.addEventListener('error', function(e) {

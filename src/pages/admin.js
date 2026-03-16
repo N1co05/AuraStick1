@@ -34,6 +34,18 @@ let selectedFile = null;
 const statTotal = document.getElementById('stat-total');
 const statCategories = document.getElementById('stat-categories');
 const statLatest = document.getElementById('stat-latest');
+const debugLog = document.getElementById('debug-log');
+
+function logToUI(msg, type = 'info') {
+    console.log(msg);
+    if (!debugLog) return;
+    const div = document.createElement('div');
+    div.style.marginBottom = '4px';
+    div.style.color = (type === 'error') ? '#ff5555' : (type === 'warn' ? '#ffff55' : '#00ff00');
+    div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    debugLog.appendChild(div);
+    debugLog.parentElement.scrollTop = debugLog.parentElement.scrollHeight;
+}
 
 const ADMIN_PASS = '1234';
 
@@ -132,14 +144,18 @@ function showToast(msg, type = 'success') {
 
 // ─── UPLOAD ───
 saveBtn.onclick = async () => {
+    logToUI('Iniciando proceso de subida...');
     const nombre = nameInput.value.trim();
     const tag = tagInput.value.trim();
     const precio = priceInput.value.trim();
 
     if (!selectedFile || !nombre || !tag || !precio) {
+        logToUI('Faltan campos: ' + (!selectedFile ? 'Imagen ' : '') + (!nombre ? 'Nombre ' : '') + (!tag ? 'Tag ' : '') + (!precio ? 'Precio' : ''), 'warn');
         showToast('Completá todos los campos y seleccioná una imagen', 'error');
         return;
     }
+
+    logToUI(`Datos: ${nombre}, Cat: ${tag}, $: ${precio}, File: ${selectedFile.name} (${selectedFile.size} bytes)`);
 
     saveBtn.disabled = true;
     saveBtn.textContent = 'Subiendo...';
@@ -147,22 +163,23 @@ saveBtn.onclick = async () => {
     progressFill.style.width = '20%';
 
     try {
-        console.log('Iniciando subida a Firebase Storage...');
-        // Upload image
-        const storageRef = ref(storage, `stickers/${Date.now()}_${selectedFile.name}`);
+        logToUI('1. Preparando referencia de Storage...');
+        const storageRef = ref(storage, `stickers/${Date.now()}_${selectedFile.name.replace(/\s+/g, '_')}`);
+        logToUI('2. Referencia creada. Iniciando uploadBytes...');
         
         progressFill.style.width = '40%';
         await uploadBytes(storageRef, selectedFile);
-        console.log('Imagen subida con éxito.');
+        logToUI('3. Imagen subida con éxito a Storage.');
         
         progressFill.style.width = '70%';
 
+        logToUI('4. Obteniendo URL de descarga...');
         const url = await getDownloadURL(storageRef);
-        console.log('URL de descarga obtenida:', url);
+        logToUI('5. URL obtenida: ' + url.substring(0, 30) + '...');
         progressFill.style.width = '85%';
 
         // Save to Firestore
-        console.log('Guardando metadatos en Firestore...');
+        logToUI('6. Guardando en Firestore...');
         await addDoc(collection(db, "productos"), {
             nombre,
             tag,
@@ -172,25 +189,26 @@ saveBtn.onclick = async () => {
         });
 
         progressFill.style.width = '100%';
+        logToUI('7. ¡ÉXITO TOTAL! Sticker guardado.');
         showToast('¡Sticker subido con éxito!');
-        console.log('Proceso de subida finalizado.');
         
         setTimeout(() => {
             resetForm();
             loadStickers();
-        }, 1000);
+        }, 1500);
 
     } catch (err) {
-        console.error('Error detallado de Firebase:', err);
+        logToUI('❌ ERROR CRÍTICO: ' + err.message, 'error');
+        console.error('Error detallado:', err);
+        
         let errorMsg = 'Error al subir';
-        if (err.code === 'storage/unauthorized') errorMsg = 'Error: No tenés permiso (Firebase Rules)';
+        if (err.code === 'storage/unauthorized') errorMsg = 'Error: No tenés permiso en Firebase (Rules)';
         else if (err.code === 'storage/canceled') errorMsg = 'Subida cancelada';
         else errorMsg = `Error: ${err.message || 'Desconocido'}`;
         
         showToast(errorMsg, 'error');
         saveBtn.disabled = false;
         saveBtn.textContent = 'Reintentar Subida';
-        // No ocultamos la barra para que el usuario vea dónde se quedó
     }
 };
 
