@@ -14,7 +14,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(160deg, #fff0f6, #fcc2d7, #faa2c1);
+            background: var(--surface);
             transition: opacity 0.4s var(--ease), visibility 0.4s;
         }
         .login-overlay.hidden {
@@ -29,6 +29,9 @@
             padding: 48px 36px;
             border-radius: var(--radius-xl);
             text-align: center;
+            background: var(--surface-card);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-xl);
         }
         .login-card .logo-text { font-size: 1.6rem; margin-bottom: 8px; }
         .login-card .subtitle { color: var(--gray-500); margin-bottom: 32px; font-size: 0.9rem; }
@@ -39,7 +42,7 @@
             letter-spacing: 0.2em;
         }
         .login-error {
-            color: #e03131;
+            color: #ef4444;
             font-size: 0.85rem;
             margin-top: 12px;
             min-height: 20px;
@@ -70,13 +73,21 @@
         .stat-card {
             padding: 24px;
             border-radius: var(--radius-lg);
-            background: #fff;
-            box-shadow: var(--shadow-sm);
+            background: var(--surface-card);
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s var(--ease);
+        }
+        .stat-card:hover {
+            border-color: rgba(240, 101, 149, 0.15);
+            transform: translateY(-2px);
         }
         .stat-card .stat-value {
             font-size: 2rem;
             font-weight: 800;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-family: 'Playfair Display', serif;
         }
         .stat-card .stat-label {
@@ -99,8 +110,8 @@
         .upload-card {
             padding: 28px;
             border-radius: var(--radius-lg);
-            background: #fff;
-            box-shadow: var(--shadow-sm);
+            background: var(--surface-card);
+            border: 1px solid var(--glass-border);
             position: sticky;
             top: 100px;
         }
@@ -112,12 +123,13 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--gray-800);
         }
 
         .file-drop {
             width: 100%;
             min-height: 180px;
-            border: 2px dashed var(--gray-300);
+            border: 2px dashed var(--gray-400);
             border-radius: var(--radius-md);
             display: flex;
             flex-direction: column;
@@ -128,10 +140,11 @@
             margin-bottom: 20px;
             overflow: hidden;
             position: relative;
+            background: var(--gray-100);
         }
         .file-drop:hover, .file-drop.dragover {
             border-color: var(--primary);
-            background: var(--pink-50);
+            background: rgba(240, 101, 149, 0.05);
         }
         .file-drop img {
             max-width: 100%;
@@ -140,7 +153,7 @@
         }
         .file-drop .placeholder {
             text-align: center;
-            color: var(--gray-400);
+            color: var(--gray-500);
             font-size: 0.9rem;
         }
         .file-drop .placeholder .icon { font-size: 2rem; margin-bottom: 8px; }
@@ -150,7 +163,7 @@
             padding: 14px;
             border: none;
             border-radius: var(--radius-full);
-            background: linear-gradient(135deg, var(--primary), var(--pink-600));
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #fff;
             font-weight: 700;
             font-size: 1rem;
@@ -158,7 +171,7 @@
             transition: all var(--duration) var(--ease);
             box-shadow: var(--shadow-pink);
         }
-        .upload-btn:hover { transform: translateY(-2px); }
+        .upload-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-glow); }
         .upload-btn:disabled {
             opacity: 0.6;
             cursor: default;
@@ -168,14 +181,14 @@
         .progress-bar {
             height: 4px;
             border-radius: 2px;
-            background: var(--gray-100);
+            background: var(--gray-200);
             margin-top: 16px;
             overflow: hidden;
             display: none;
         }
         .progress-bar .fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--pink-400));
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             border-radius: 2px;
             width: 0%;
             transition: width 0.3s;
@@ -185,8 +198,8 @@
         .inventory-card {
             padding: 28px;
             border-radius: var(--radius-lg);
-            background: #fff;
-            box-shadow: var(--shadow-sm);
+            background: var(--surface-card);
+            border: 1px solid var(--glass-border);
         }
 
         .inventory-card h2 {
@@ -196,6 +209,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--gray-800);
         }
 
         .inv-list {
@@ -210,10 +224,14 @@
             gap: 16px;
             padding: 14px 16px;
             border-radius: var(--radius-md);
-            background: var(--gray-50);
+            background: var(--gray-100);
+            border: 1px solid var(--glass-border);
             transition: all var(--duration) var(--ease);
         }
-        .inv-item:hover { background: var(--pink-50); }
+        .inv-item:hover {
+            background: rgba(240, 101, 149, 0.05);
+            border-color: rgba(240, 101, 149, 0.15);
+        }
 
         .inv-item img {
             width: 52px;
@@ -223,16 +241,14 @@
             flex-shrink: 0;
         }
 
-        .inv-info {
-            flex: 1;
-            overflow: hidden;
-        }
+        .inv-info { flex: 1; overflow: hidden; }
         .inv-info .name {
             font-weight: 700;
             font-size: 0.95rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: var(--gray-800);
         }
         .inv-info .meta {
             font-size: 0.8rem;
@@ -245,8 +261,8 @@
             height: 36px;
             border-radius: 50%;
             border: none;
-            background: #ffeded;
-            color: #e03131;
+            background: rgba(220, 38, 38, 0.1);
+            color: #ef4444;
             cursor: pointer;
             font-size: 0.9rem;
             display: flex;
@@ -256,7 +272,7 @@
             transition: all var(--duration) var(--ease);
         }
         .inv-delete:hover {
-            background: #e03131;
+            background: #ef4444;
             color: #fff;
             transform: scale(1.1);
         }
@@ -264,7 +280,7 @@
         .inv-empty {
             text-align: center;
             padding: 40px 20px;
-            color: var(--gray-400);
+            color: var(--gray-500);
         }
         .inv-empty .icon { font-size: 2.5rem; margin-bottom: 12px; }
 
@@ -277,14 +293,13 @@
             text-align: center;
             color: var(--gray-500);
             font-size: 0.85rem;
+            border-top: 1px solid var(--glass-border);
         }
         .footer a { color: var(--primary); font-weight: 600; }
 
         /* RESPONSIVE */
         @media (max-width: 900px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
+            .dashboard-grid { grid-template-columns: 1fr; }
             .upload-card { position: static; }
         }
         @media (max-width: 600px) {
@@ -293,14 +308,15 @@
     </style>
 </head>
 <body>
+    <canvas id="particles-canvas"></canvas>
     <div class="page-bg"></div>
     <div class="bg-blob bg-blob--1"></div>
     <div class="bg-blob bg-blob--2"></div>
 
     <!-- LOGIN OVERLAY -->
     <div class="login-overlay" id="login-overlay">
-        <div class="login-card glass-strong">
-            <div class="logo-text">Aura Sticks</div>
+        <div class="login-card">
+            <div class="logo-text" style="font-size: 1.6rem; margin-bottom: 8px;">Aura Sticks</div>
             <p class="subtitle">Panel de Administración</p>
             <div class="form-group">
                 <label>Contraseña</label>
@@ -312,7 +328,7 @@
     </div>
 
     <!-- NAVBAR -->
-    <nav class="navbar glass-strong">
+    <nav class="navbar">
         <div class="navbar-brand">
             <img src="src/assets/logo.png" alt="Aura Sticks" class="navbar-logo">
             <span class="logo-text">Aura Sticks</span>
@@ -329,6 +345,7 @@
         <div class="container">
             <div class="admin-header">
                 <div>
+                    <div class="section-label">🔒 Panel</div>
                     <h1 class="section-title">Panel de Control</h1>
                     <p class="section-subtitle" style="margin-bottom: 0;">Gestioná tu catálogo de stickers</p>
                 </div>
@@ -402,20 +419,46 @@
 
     <div class="toast-container" id="toast-container"></div>
 
-    <!-- DEBUG CONSOLE (Temporary for troubleshooting) -->
+    <!-- DEBUG CONSOLE -->
     <div class="container" style="margin-top: 40px; margin-bottom: 40px;">
-        <div class="glass-strong" style="padding: 20px; border-radius: var(--radius-lg); font-family: monospace; font-size: 0.8rem; max-height: 200px; overflow-y: auto; background: #1a1a1a; color: #00ff00; display: none;" id="debug-console">
-            <div style="color: #fff; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 4px;">🛠️ Consola de Depuración (Para errores)</div>
+        <div style="padding: 20px; border-radius: var(--radius-lg); font-family: monospace; font-size: 0.8rem; max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.6); color: #00ff00; display: none; border: 1px solid var(--glass-border);" id="debug-console">
+            <div style="color: #fff; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px;">🛠️ Consola de Depuración</div>
             <div id="debug-log"></div>
         </div>
         <button class="btn btn-ghost" style="font-size: 0.7rem; padding: 8px 16px; margin-top: 10px;" onclick="document.getElementById('debug-console').style.display='block'">Mostrar consola de errores</button>
     </div>
 
     <script>
-        // Detector de carga de módulos (para diagnosticar bloqueos de seguridad)
+        // ═══ PARTICLES ═══
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            resize(); window.addEventListener('resize', resize);
+            class P {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 1.5 + 0.3;
+                    this.speedX = (Math.random() - 0.5) * 0.15;
+                    this.speedY = (Math.random() - 0.5) * 0.15;
+                    this.opacity = Math.random() * 0.2 + 0.05;
+                    this.pulse = Math.random() * Math.PI * 2;
+                }
+                update() { this.x += this.speedX; this.y += this.speedY; this.pulse += 0.015; if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset(); }
+                draw() { const g = Math.sin(this.pulse) * 0.3 + 0.7; ctx.beginPath(); ctx.arc(this.x, this.y, this.size * g, 0, Math.PI * 2); ctx.fillStyle = `rgba(192, 132, 252, ${this.opacity * g})`; ctx.fill(); }
+            }
+            for (let i = 0; i < 25; i++) particles.push(new P());
+            function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+            animate();
+        })();
+
+        // Module load error detection
         window.addEventListener('error', function(e) {
             if (e.target && e.target.src && e.target.src.includes('admin.js')) {
-                document.getElementById('login-error').innerText = 'ERROR: El navegador bloqueó la cara del Panel. Usá el servidor local.';
+                document.getElementById('login-error').innerText = 'ERROR: El navegador bloqueó la carga del Panel. Usá el servidor local.';
             }
         }, true);
     </script>
