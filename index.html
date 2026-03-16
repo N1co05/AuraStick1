@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Aura Stickers — Los stickers más premium para personalizar tu mundo. Calidad vinilo resistente al agua y al sol.">
+    <title>Aura Stickers — Stickers Premium</title>
+    <link rel="stylesheet" href="src/styles/global.css">
+    <style>
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            position: relative;
+        }
+
+        .hero-badge {
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s var(--ease) both;
+        }
+
+        .hero-logo {
+            width: 220px;
+            height: 220px;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 40px rgba(230, 73, 128, 0.25));
+            animation: float 6s ease-in-out infinite;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--gray-900);
+            margin-bottom: 18px;
+            animation: fadeInUp 0.7s var(--ease) 0.1s both;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary), var(--pink-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--gray-600);
+            max-width: 520px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.7s var(--ease) 0.2s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.7s var(--ease) 0.3s both;
+        }
+
+        /* ── FEATURES ── */
+        .features {
+            padding: 80px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            padding: 32px 28px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--pink-100), var(--pink-200));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin: 0 auto 20px;
+        }
+
+        .feature-card h3 {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--gray-800);
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* ── SHOWCASE ── */
+        .showcase {
+            padding: 60px 0 100px;
+            text-align: center;
+        }
+
+        .showcase-scroll {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 24px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .showcase-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .showcase-item {
+            flex: 0 0 200px;
+            scroll-snap-align: center;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: transform var(--duration) var(--ease);
+        }
+
+        .showcase-item:hover {
+            transform: scale(1.05);
+        }
+
+        .showcase-item img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            padding: 40px 0;
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--pink-100);
+        }
+
+        .footer a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 100px 16px 60px;
+            }
+
+            .hero-logo {
+                width: 160px;
+                height: 160px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-bg"></div>
+    <div class="bg-blob bg-blob--1"></div>
+    <div class="bg-blob bg-blob--2"></div>
+    <div class="bg-blob bg-blob--3"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar glass-strong" id="main-nav">
+        <span class="logo-text">Aura Stickers</span>
+        <div class="nav-links">
+            <a href="index.html" class="active">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="admin.html">Admin</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="badge badge-pink hero-badge">✨ Stickers Premium</div>
+        <img src="src/assets/logo.png" alt="Aura Stickers" class="hero-logo">
+        <h1 class="hero-title">Personalizá tu mundo<br>con <span>estilo</span></h1>
+        <p class="hero-desc">Stickers de vinilo ultra resistentes al agua y al sol. Ideales para tu termo, notebook,
+            celular o donde quieras.</p>
+        <div class="hero-actions">
+            <a href="catalogo.html" class="btn btn-primary">Explorar Catálogo →</a>
+            <a href="https://wa.me/5491168210762" target="_blank" class="btn btn-outline">Contactanos</a>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card glass-strong">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Ultra Resistentes</h3>
+                    <p>Vinilo de alta calidad que resiste agua, sol y el uso diario sin despegarse ni decolorarse.</p>
+                </div>
+                <div class="feature-card glass-strong">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Diseños Exclusivos</h3>
+                    <p>Catálogo actualizado con los diseños más trendy. Personajes, frases, anime y mucho más.</p>
+                </div>
+                <div class="feature-card glass-strong">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Envío Rápido</h3>
+                    <p>Hacé tu pedido por WhatsApp y recibilo en tu puerta. Envíos a todo el país.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="showcase">
+        <div class="container">
+            <h2 class="section-title">¿Listo para darle onda a tus cosas?</h2>
+            <p class="section-subtitle">Explorá todo nuestro catálogo y armá tu pedido</p>
+            <a href="catalogo.html" class="btn btn-primary" style="padding: 16px 48px; font-size: 1.1rem;">Ver Catálogo
+                Completo</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 <a href="index.html">Aura Stickers</a>. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(255,255,255,0.92)';
+                nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.08)';
+            } else {
+                nav.style.background = '';
+                nav.style.boxShadow = '';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control — Aura Stickers</title>
+    <link rel="stylesheet" href="src/styles/global.css">
+    <style>
+        /* ── LOGIN OVERLAY ── */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 20000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(160deg, #fff0f6, #fcc2d7, #faa2c1);
+            transition: opacity 0.4s var(--ease), visibility 0.4s;
+        }
+        .login-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .login-card {
+            width: 90%;
+            max-width: 420px;
+            padding: 48px 36px;
+            border-radius: var(--radius-xl);
+            text-align: center;
+        }
+        .login-card .logo-text { font-size: 1.6rem; margin-bottom: 8px; }
+        .login-card .subtitle { color: var(--gray-500); margin-bottom: 32px; font-size: 0.9rem; }
+        .login-card .form-group { text-align: left; }
+        .login-card .form-control {
+            text-align: center;
+            font-size: 1.2rem;
+            letter-spacing: 0.2em;
+        }
+        .login-error {
+            color: #e03131;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+
+        /* ── DASHBOARD ── */
+        .admin-page {
+            padding: 100px 0 60px;
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            background: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+        }
+        .stat-card .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* ── UPLOAD FORM ── */
+        .upload-card {
+            padding: 28px;
+            border-radius: var(--radius-lg);
+            background: #fff;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 100px;
+        }
+
+        .upload-card h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-drop {
+            width: 100%;
+            min-height: 180px;
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--duration) var(--ease);
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .file-drop:hover, .file-drop.dragover {
+            border-color: var(--primary);
+            background: var(--pink-50);
+        }
+        .file-drop img {
+            max-width: 100%;
+            max-height: 180px;
+            object-fit: contain;
+        }
+        .file-drop .placeholder {
+            text-align: center;
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+        .file-drop .placeholder .icon { font-size: 2rem; margin-bottom: 8px; }
+
+        .upload-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, var(--primary), var(--pink-600));
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--duration) var(--ease);
+            box-shadow: var(--shadow-pink);
+        }
+        .upload-btn:hover { transform: translateY(-2px); }
+        .upload-btn:disabled {
+            opacity: 0.6;
+            cursor: default;
+            transform: none;
+        }
+
+        .progress-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: var(--gray-100);
+            margin-top: 16px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--pink-400));
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* ── INVENTORY LIST ── */
+        .inventory-card {
+            padding: 28px;
+            border-radius: var(--radius-lg);
+            background: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .inventory-card h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inv-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .inv-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            background: var(--gray-50);
+            transition: all var(--duration) var(--ease);
+        }
+        .inv-item:hover { background: var(--pink-50); }
+
+        .inv-item img {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .inv-info {
+            flex: 1;
+            overflow: hidden;
+        }
+        .inv-info .name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .inv-info .meta {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        .inv-delete {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #ffeded;
+            color: #e03131;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all var(--duration) var(--ease);
+        }
+        .inv-delete:hover {
+            background: #e03131;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .inv-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-400);
+        }
+        .inv-empty .icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+        /* TOAST */
+        .toast-container { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 10000; pointer-events: none; }
+
+        /* FOOTER */
+        .footer {
+            padding: 40px 0;
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+        .footer a { color: var(--primary); font-weight: 600; }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .upload-card { position: static; }
+        }
+        @media (max-width: 600px) {
+            .stats-row { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-bg"></div>
+    <div class="bg-blob bg-blob--1"></div>
+    <div class="bg-blob bg-blob--2"></div>
+
+    <!-- LOGIN OVERLAY -->
+    <div class="login-overlay" id="login-overlay">
+        <div class="login-card glass-strong">
+            <div class="logo-text">Aura Stickers</div>
+            <p class="subtitle">Panel de Administración</p>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="admin-pass" class="form-control" placeholder="••••" autofocus>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 8px;" id="login-btn">Ingresar</button>
+            <div class="login-error" id="login-error"></div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar glass-strong">
+        <span class="logo-text">Aura Stickers</span>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="admin.html" class="active">Admin</a>
+        </div>
+    </nav>
+
+    <!-- ADMIN DASHBOARD -->
+    <section class="admin-page">
+        <div class="container">
+            <div class="admin-header">
+                <div>
+                    <h1 class="section-title">Panel de Control</h1>
+                    <p class="section-subtitle" style="margin-bottom: 0;">Gestioná tu catálogo de stickers</p>
+                </div>
+                <button class="btn btn-ghost" id="logout-btn">Cerrar sesión</button>
+            </div>
+
+            <div class="stats-row" id="stats-row">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-total">—</div>
+                    <div class="stat-label">Total Stickers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-categories">—</div>
+                    <div class="stat-label">Categorías</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-latest">—</div>
+                    <div class="stat-label">Último agregado</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- UPLOAD FORM -->
+                <div class="upload-card">
+                    <h2>📤 Nuevo Sticker</h2>
+
+                    <div class="file-drop" id="file-drop">
+                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                        <div class="placeholder" id="drop-placeholder">
+                            <div class="icon">📷</div>
+                            <div>Hacé clic o arrastrá una imagen</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="sticker-name" class="form-control" placeholder="Ej: Stitch Kawaii">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <input type="text" id="sticker-tag" class="form-control" placeholder="Ej: Disney">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio ($)</label>
+                        <input type="number" id="sticker-price" class="form-control" placeholder="Ej: 500">
+                    </div>
+
+                    <button class="upload-btn" id="save-btn">Subir Sticker</button>
+                    <div class="progress-bar" id="progress-bar"><div class="fill" id="progress-fill"></div></div>
+                </div>
+
+                <!-- INVENTORY -->
+                <div class="inventory-card">
+                    <h2>📦 Inventario <span class="badge badge-pink" id="inv-count">0</span></h2>
+                    <div class="inv-list" id="sticker-list">
+                        <div class="inv-empty">
+                            <div class="icon">📦</div>
+                            <div>Cargando inventario...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 <a href="index.html">Aura Stickers</a> — Panel de Administración</p>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // Detector de carga de módulos (para diagnosticar bloqueos de seguridad)
+        window.addEventListener('error', function(e) {
+            if (e.target && e.target.src && e.target.src.includes('admin.js')) {
+                document.getElementById('login-error').innerText = 'ERROR: El navegador bloqueó la cara del Panel. Usá el servidor local.';
+            }
+        }, true);
+    </script>
+    <script type="module" src="src/pages/admin.js"></script>
+</body>
+</html>
