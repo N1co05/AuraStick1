@@ -1,4 +1,4 @@
-import { db, collection, getDocs, query, orderBy } from '../services/firebase.js';
+import { supabase } from '../services/supabase.js';
 
 // DOM
 const grid = document.getElementById('product-grid');
@@ -16,15 +16,16 @@ const whatsappBtn = document.getElementById('whatsapp-btn');
 let allStickers = [];
 let cart = JSON.parse(localStorage.getItem('aura_cart')) || {};
 
-// ─── Load Products from Firebase ───
+// ─── Load Products from Supabase ───
 async function loadProducts() {
     try {
-        const q = query(collection(db, "productos"), orderBy("timestamp", "desc"));
-        const snapshot = await getDocs(q);
-        allStickers = [];
-        snapshot.forEach(docSnap => {
-            allStickers.push({ id: docSnap.id, ...docSnap.data() });
-        });
+        const { data, error } = await supabase
+            .from('productos')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        allStickers = data || [];
     } catch (err) {
         console.error('Error loading products:', err);
         allStickers = [];
@@ -42,13 +43,8 @@ async function loadProducts() {
 function renderCategories() {
     const tags = [...new Set(allStickers.map(s => s.tag).filter(Boolean))];
     categoryList.innerHTML = '';
-
-    const allChip = createChip('Todos', true);
-    categoryList.appendChild(allChip);
-
-    tags.forEach(tag => {
-        categoryList.appendChild(createChip(tag, false));
-    });
+    categoryList.appendChild(createChip('Todos', true));
+    tags.forEach(tag => categoryList.appendChild(createChip(tag, false)));
 }
 
 function createChip(label, active) {
@@ -71,13 +67,7 @@ function applyFilters() {
     const sort = sortSelect.value;
 
     let filtered = [...allStickers];
-
-    // Category filter
-    if (activeTag !== 'Todos') {
-        filtered = filtered.filter(s => s.tag === activeTag);
-    }
-
-    // Search filter
+    if (activeTag !== 'Todos') filtered = filtered.filter(s => s.tag === activeTag);
     if (search) {
         filtered = filtered.filter(s =>
             s.nombre.toLowerCase().includes(search) ||
@@ -85,46 +75,29 @@ function applyFilters() {
         );
     }
 
-    // Sort
     switch (sort) {
-        case 'price-asc':
-            filtered.sort((a, b) => (a.precio || 0) - (b.precio || 0));
-            break;
-        case 'price-desc':
-            filtered.sort((a, b) => (b.precio || 0) - (a.precio || 0));
-            break;
-        case 'name':
-            filtered.sort((a, b) => a.nombre.localeCompare(b.nombre));
-            break;
-        case 'newest':
-        default:
-            filtered.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        case 'price-asc': filtered.sort((a,b) => a.precio - b.precio); break;
+        case 'price-desc': filtered.sort((a,b) => b.precio - a.precio); break;
+        case 'name': filtered.sort((a,b) => a.nombre.localeCompare(b.nombre)); break;
     }
 
     renderGrid(filtered);
-    resultsInfo.innerHTML = `<strong>${filtered.length}</strong> sticker${filtered.length !== 1 ? 's' : ''} encontrado${filtered.length !== 1 ? 's' : ''}`;
+    resultsInfo.innerHTML = `<strong>${filtered.length}</strong> stickers encontrados`;
 }
 
 // ─── Render Grid ───
 function renderGrid(products) {
-    grid.innerHTML = '';
-
-    if (products.length === 0) {
-        grid.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1;">
-                <div class="icon">🔍</div>
-                <h3>No se encontraron stickers</h3>
-                <p>Probá con otra búsqueda o categoría</p>
-            </div>
-        `;
-        return;
-    }
+    grid.innerHTML = products.length ? '' : `
+        <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+            <div class="icon" style="font-size: 3rem;">🔍</div>
+            <h3>No se encontraron stickers</h3>
+        </div>
+    `;
 
     products.forEach((p, i) => {
         const card = document.createElement('div');
         card.className = 'product-card animate-fade-in-up';
         card.style.animationDelay = `${Math.min(i * 0.05, 0.5)}s`;
-
         const qty = cart[p.id] ? cart[p.id].qty : 0;
 
         card.innerHTML = `
@@ -134,7 +107,7 @@ function renderGrid(products) {
             </div>
             <div class="product-body">
                 <div class="product-name">${p.nombre}</div>
-                <div class="product-price">$${p.precio || 0}</div>
+                <div class="product-price">$${p.precio}</div>
                 <div class="qty-row">
                     <button class="qty-btn minus-btn" data-id="${p.id}">−</button>
                     <span class="qty-value" data-qty-id="${p.id}">${qty}</span>
@@ -147,35 +120,23 @@ function renderGrid(products) {
         `;
         grid.appendChild(card);
     });
-
     attachListeners();
 }
 
 // ─── Cart Logic ───
 function attachListeners() {
-    document.querySelectorAll('.plus-btn').forEach(btn => {
-        btn.onclick = () => changeQty(btn.dataset.id, 1);
-    });
-    document.querySelectorAll('.minus-btn').forEach(btn => {
-        btn.onclick = () => changeQty(btn.dataset.id, -1);
-    });
-    document.querySelectorAll('.add-btn').forEach(btn => {
-        btn.onclick = () => {
-            if (!cart[btn.dataset.id]) changeQty(btn.dataset.id, 1);
-        };
-    });
+    document.querySelectorAll('.plus-btn').forEach(btn => btn.onclick = () => changeQty(btn.dataset.id, 1));
+    document.querySelectorAll('.minus-btn').forEach(btn => btn.onclick = () => changeQty(btn.dataset.id, -1));
+    document.querySelectorAll('.add-btn').forEach(btn => btn.onclick = () => changeQty(btn.dataset.id, 1));
 }
 
 function changeQty(id, delta) {
-    const product = allStickers.find(s => s.id === id);
+    const product = allStickers.find(s => s.id == id);
     if (!product) return;
-
-    if (!cart[id]) cart[id] = { nombre: product.nombre, precio: product.precio, imagen: product.imagen, qty: 0 };
+    if (!cart[id]) cart[id] = { nombre: product.nombre, precio: product.precio, qty: 0 };
     cart[id].qty += delta;
-
     if (cart[id].qty <= 0) delete cart[id];
-
-    saveCart();
+    localStorage.setItem('aura_cart', JSON.stringify(cart));
     updateQtyDisplay(id);
     updateCartBar();
 }
@@ -193,43 +154,24 @@ function updateQtyDisplay(id) {
     }
 }
 
-function saveCart() {
-    localStorage.setItem('aura_cart', JSON.stringify(cart));
-}
-
 function updateCartBar() {
     const items = Object.values(cart);
     const totalQty = items.reduce((sum, i) => sum + i.qty, 0);
     const totalPrice = items.reduce((sum, i) => sum + (i.precio * i.qty), 0);
-
     cartCountEl.textContent = totalQty;
     cartTotalEl.textContent = `$${totalPrice.toLocaleString()}`;
-
-    if (totalQty > 0) {
-        cartBar.classList.add('visible');
-    } else {
-        cartBar.classList.remove('visible');
-    }
+    cartBar.classList.toggle('visible', totalQty > 0);
 }
 
-// ─── WhatsApp ───
 whatsappBtn.onclick = () => {
     const items = Object.values(cart);
-    if (items.length === 0) return;
-
-    let msg = "¡Hola! 🌟 Quisiera pedir estos stickers:\n\n";
-    items.forEach(item => {
-        msg += `• ${item.nombre} x${item.qty} — $${item.precio * item.qty}\n`;
-    });
-    const total = items.reduce((sum, i) => sum + (i.precio * i.qty), 0);
-    msg += `\n💰 *TOTAL: $${total.toLocaleString()}*`;
-
+    if (!items.length) return;
+    let msg = "¡Hola! Quisiera pedir estos stickers:\n\n";
+    items.forEach(i => msg += `• ${i.nombre} x${i.qty} — $${i.precio * i.qty}\n`);
+    msg += `\n💰 *TOTAL: $${items.reduce((sum, i) => sum + (i.precio * i.qty), 0).toLocaleString()}*`;
     window.open(`https://wa.me/5491168210762?text=${encodeURIComponent(msg)}`);
 };
 
-// ─── Event Listeners ───
 searchInput.oninput = () => applyFilters();
 sortSelect.onchange = () => applyFilters();
-
-// ─── Init ───
 loadProducts();
