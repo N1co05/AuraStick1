@@ -19,29 +19,29 @@
     --primary:       #f06595;
     --primary-light:  #ff85a2;
     --primary-dark:   #d6336c;
-    --primary-glow:   rgba(240, 101, 149, 0.4);
-    --accent:         #c084fc;
-    --accent-glow:    rgba(192, 132, 252, 0.3);
+    --primary-glow:   rgba(240, 101, 149, 0.5);
+    --accent:         #f783ac;
+    --accent-glow:    rgba(247, 131, 172, 0.35);
 
-    /* Dark Neutrals */
-    --gray-50:  #0a0a0f;
-    --gray-100: #111118;
-    --gray-200: #1a1a24;
-    --gray-300: #252532;
-    --gray-400: #3a3a4a;
-    --gray-500: #6b6b80;
-    --gray-600: #8b8ba0;
-    --gray-700: #a8a8bc;
-    --gray-800: #d0d0e0;
-    --gray-900: #f0f0ff;
+    /* Dark Neutrals — pink-tinted */
+    --gray-50:  #0c0810;
+    --gray-100: #140e18;
+    --gray-200: #1e1524;
+    --gray-300: #2a1e32;
+    --gray-400: #3d2d4a;
+    --gray-500: #7a6488;
+    --gray-600: #9e8aac;
+    --gray-700: #b8a8c4;
+    --gray-800: #d8cce0;
+    --gray-900: #f4eeff;
 
-    /* Surfaces */
-    --surface:         #0d0d14;
-    --surface-elevated: rgba(20, 20, 32, 0.85);
-    --surface-card:     rgba(25, 25, 40, 0.7);
-    --surface-glass:    rgba(255, 255, 255, 0.04);
-    --glass-border:     rgba(255, 255, 255, 0.08);
-    --overlay:          rgba(0, 0, 0, 0.6);
+    /* Surfaces — pink-tinted */
+    --surface:         #0e0912;
+    --surface-elevated: rgba(24, 14, 30, 0.88);
+    --surface-card:     rgba(30, 18, 38, 0.75);
+    --surface-glass:    rgba(240, 101, 149, 0.03);
+    --glass-border:     rgba(240, 101, 149, 0.1);
+    --overlay:          rgba(10, 5, 15, 0.6);
 
     /* Effects */
     --shadow-sm:  0 2px 8px rgba(0,0,0,0.3);
@@ -49,7 +49,7 @@
     --shadow-lg:  0 20px 60px -15px rgba(0,0,0,0.6);
     --shadow-xl:  0 30px 80px -20px rgba(0,0,0,0.7);
     --shadow-pink: 0 10px 40px -10px var(--primary-glow);
-    --shadow-glow: 0 0 30px var(--primary-glow), 0 0 60px rgba(240, 101, 149, 0.15);
+    --shadow-glow: 0 0 30px var(--primary-glow), 0 0 80px rgba(240, 101, 149, 0.2);
 
     /* Radii */
     --radius-sm: 10px;
@@ -101,9 +101,9 @@ button { font-family: inherit; }
     position: fixed;
     inset: 0;
     z-index: -2;
-    background: radial-gradient(ellipse at 20% 50%, rgba(240, 101, 149, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(192, 132, 252, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(240, 101, 149, 0.05) 0%, transparent 50%),
+    background: radial-gradient(ellipse at 20% 50%, rgba(240, 101, 149, 0.14) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(240, 101, 149, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(214, 51, 108, 0.08) 0%, transparent 50%),
                 var(--surface);
     animation: bgPulse 15s ease infinite alternate;
 }
@@ -126,18 +126,21 @@ button { font-family: inherit; }
     width: 700px; height: 700px;
     background: var(--primary);
     top: -250px; right: -200px;
+    opacity: 0.22;
     animation: blobFloat 30s ease-in-out infinite alternate;
 }
 .bg-blob--2 {
     width: 600px; height: 600px;
-    background: var(--accent);
+    background: var(--primary-dark);
     bottom: -200px; left: -150px;
+    opacity: 0.2;
     animation: blobFloat 25s ease-in-out infinite alternate-reverse;
 }
 .bg-blob--3 {
     width: 400px; height: 400px;
     background: var(--primary-light);
     top: 40%; left: 50%;
+    opacity: 0.18;
     animation: blobFloat 35s ease-in-out infinite alternate;
 }
 
