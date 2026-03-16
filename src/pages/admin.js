@@ -27,6 +27,9 @@ const stickerList = document.getElementById('sticker-list');
 const invCount = document.getElementById('inv-count');
 const toastContainer = document.getElementById('toast-container');
 
+// State
+let selectedFile = null;
+
 // Stats
 const statTotal = document.getElementById('stat-total');
 const statCategories = document.getElementById('stat-categories');
@@ -85,13 +88,16 @@ fileDrop.ondrop = (e) => {
     e.preventDefault();
     fileDrop.classList.remove('dragover');
     if (e.dataTransfer.files.length) {
-        fileInput.files = e.dataTransfer.files;
-        showPreview(e.dataTransfer.files[0]);
+        selectedFile = e.dataTransfer.files[0];
+        showPreview(selectedFile);
     }
 };
 
 fileInput.onchange = () => {
-    if (fileInput.files[0]) showPreview(fileInput.files[0]);
+    if (fileInput.files[0]) {
+        selectedFile = fileInput.files[0];
+        showPreview(selectedFile);
+    }
 };
 
 function showPreview(file) {
@@ -103,6 +109,7 @@ function showPreview(file) {
 }
 
 function resetForm() {
+    selectedFile = null;
     fileInput.value = '';
     nameInput.value = '';
     tagInput.value = '';
@@ -125,31 +132,37 @@ function showToast(msg, type = 'success') {
 
 // ─── UPLOAD ───
 saveBtn.onclick = async () => {
-    const file = fileInput.files[0];
     const nombre = nameInput.value.trim();
     const tag = tagInput.value.trim();
     const precio = priceInput.value.trim();
 
-    if (!file || !nombre || !tag || !precio) {
-        showToast('Completá todos los campos', 'error');
+    if (!selectedFile || !nombre || !tag || !precio) {
+        showToast('Completá todos los campos y seleccioná una imagen', 'error');
         return;
     }
 
     saveBtn.disabled = true;
     saveBtn.textContent = 'Subiendo...';
     progressBar.style.display = 'block';
-    progressFill.style.width = '30%';
+    progressFill.style.width = '20%';
 
     try {
+        console.log('Iniciando subida a Firebase Storage...');
         // Upload image
-        const storageRef = ref(storage, `stickers/${Date.now()}_${file.name}`);
-        await uploadBytes(storageRef, file);
+        const storageRef = ref(storage, `stickers/${Date.now()}_${selectedFile.name}`);
+        
+        progressFill.style.width = '40%';
+        await uploadBytes(storageRef, selectedFile);
+        console.log('Imagen subida con éxito.');
+        
         progressFill.style.width = '70%';
 
         const url = await getDownloadURL(storageRef);
+        console.log('URL de descarga obtenida:', url);
         progressFill.style.width = '85%';
 
         // Save to Firestore
+        console.log('Guardando metadatos en Firestore...');
         await addDoc(collection(db, "productos"), {
             nombre,
             tag,
@@ -160,14 +173,24 @@ saveBtn.onclick = async () => {
 
         progressFill.style.width = '100%';
         showToast('¡Sticker subido con éxito!');
-        resetForm();
-        loadStickers();
+        console.log('Proceso de subida finalizado.');
+        
+        setTimeout(() => {
+            resetForm();
+            loadStickers();
+        }, 1000);
+
     } catch (err) {
-        console.error(err);
-        showToast('Error al subir el sticker', 'error');
+        console.error('Error detallado de Firebase:', err);
+        let errorMsg = 'Error al subir';
+        if (err.code === 'storage/unauthorized') errorMsg = 'Error: No tenés permiso (Firebase Rules)';
+        else if (err.code === 'storage/canceled') errorMsg = 'Subida cancelada';
+        else errorMsg = `Error: ${err.message || 'Desconocido'}`;
+        
+        showToast(errorMsg, 'error');
         saveBtn.disabled = false;
-        saveBtn.textContent = 'Subir Sticker';
-        progressBar.style.display = 'none';
+        saveBtn.textContent = 'Reintentar Subida';
+        // No ocultamos la barra para que el usuario vea dónde se quedó
     }
 };
 
