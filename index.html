@@ -281,7 +281,7 @@
                     const glow = Math.sin(this.pulse) * 0.3 + 0.7;
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size * glow, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(240, 101, 149, ${this.opacity * glow})`;
+                    ctx.fillStyle = `rgba(200, 50, 100, ${this.opacity * glow})`;
                     ctx.fill();
                 }
             }
@@ -302,7 +302,7 @@
                             ctx.beginPath();
                             ctx.moveTo(particles[i].x, particles[i].y);
                             ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.strokeStyle = `rgba(240, 101, 149, ${0.06 * (1 - dist / 120)})`;
+                            ctx.strokeStyle = `rgba(200, 50, 100, ${0.08 * (1 - dist / 120)})`;
                             ctx.lineWidth = 0.5;
                             ctx.stroke();
                         }
@@ -349,8 +349,8 @@
         const nav = document.getElementById('main-nav');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 80) {
-                nav.style.background = 'rgba(13, 13, 20, 0.9)';
-                nav.style.boxShadow = '0 8px 40px rgba(0,0,0,0.5)';
+                nav.style.background = 'rgba(255, 255, 255, 0.92)';
+                nav.style.boxShadow = '0 4px 30px rgba(166, 30, 77, 0.1)';
             } else {
                 nav.style.background = '';
                 nav.style.boxShadow = '';

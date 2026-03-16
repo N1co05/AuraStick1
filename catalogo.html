@@ -268,11 +268,11 @@
             z-index: 8000;
             transform: translateY(100%);
             transition: transform 0.4s var(--ease-spring);
-            background: rgba(13, 13, 20, 0.85);
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
-            border-top: 1px solid var(--glass-border);
-            box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border-top: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 -4px 30px rgba(166, 30, 77, 0.1);
         }
         .cart-bar.visible { transform: translateY(0); }
         .cart-bar-info {
@@ -463,8 +463,8 @@
         // ═══ NAVBAR SCROLL ═══
         const nav = document.getElementById('main-nav');
         window.addEventListener('scroll', () => {
-            nav.style.background = window.scrollY > 50 ? 'rgba(13, 13, 20, 0.9)' : '';
-            nav.style.boxShadow = window.scrollY > 50 ? '0 8px 40px rgba(0,0,0,0.5)' : '';
+            nav.style.background = window.scrollY > 50 ? 'rgba(255, 255, 255, 0.92)' : '';
+            nav.style.boxShadow = window.scrollY > 50 ? '0 4px 30px rgba(166, 30, 77, 0.1)' : '';
         });
     </script>
     <script type="module" src="src/pages/catalogo.js"></script>
